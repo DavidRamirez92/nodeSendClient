@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import Layout from '../components/Layout';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
+import authContext from '../context/auth/authContext';
+import Alert from '../components/Alert';
 
 
 const CreateAccount = () => {
+
+    //acces to state
+    const AuthContext = useContext(authContext);
+    const {message, registerUser} = AuthContext;
 
     //Form and validation whit formik and Yup
     const formik = useFormik({
@@ -26,7 +32,7 @@ const CreateAccount = () => {
                       .min(6,"Password must contain at least 6 characters"),
         }),
         onSubmit: values => {
-            console.log(values);
+            registerUser(values);
         }
     })
   return ( 
@@ -34,6 +40,8 @@ const CreateAccount = () => {
         <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
 
             <h2 className="text-4xl font-sans font-bold text-gray-800 text-center my-4">Create Account</h2>
+
+            {message && <Alert/>}
 
             <div className="flex justify-center mt-5">
                 <div className="w-full max-w-lg">
