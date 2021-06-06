@@ -4,14 +4,19 @@ import authReducer from './authReducer';
 
 import {SUCCESSFUL_REGISTRATION,
         ERROR_REGISTRATION,
-        CLEAR_ALERT} from '../../types';
+        CLEAR_ALERT,
+        SUCCESSFUL_LOGIN,
+        ERROR_LOGIN,
+        USER_AUTH,
+        LOG_OUT } from '../../types';
 
 import clientAxios from '../../config/axios';
+import tokenAuth from '../../config/tokenAuth';
 
 const AuthState = ({children}) => {
      //initial State
     const initialState = {
-        token: '',
+        token: typeof window !== 'undefined' ? localStorage.getItem('token') : '',
         auth: null,
         user: null,
         message: null
@@ -46,13 +51,58 @@ const AuthState = ({children}) => {
         },3000);
     }
 
-    //user auth
-    const userAuth = name => {
+    //Auth Users
+    const logIn = async data => {
+       
+        try {
+            const answer = await clientAxios.post('/api/auth',data);
+            dispatch({
+                type: SUCCESSFUL_LOGIN,
+                payload: answer.data.token
+            })
+        } catch (error) {
+            dispatch({
+                type: ERROR_LOGIN,
+                payload: error.response.data.msg
+            })
+        }
+
+        //Clear alert after 3 seg
+        setTimeout(() => {
+            dispatch({
+                type: CLEAR_ALERT
+            })
+        },3000);
+    }
+
+    //Return auth User acccording to JWT
+    const userAuth = async () => {
+        const token =localStorage.getItem('token');
+        if(token) {
+            tokenAuth(token);
+        }
+
+        try {
+            const answer = await clientAxios.get('/api/auth');
+            dispatch({
+                type: USER_AUTH,
+                payload:answer.data.user
+            })
+        } catch (error) {
+            dispatch({
+                type: ERROR_LOGIN,
+                payload: error.response.data.msg
+            })
+        }
+    }
+
+    //Log out
+    const logOut = () => {
         dispatch({
-            type: USER_AUTH,
-            payload: name
+            type: LOG_OUT
         })
     }
+   
     return(
         <authContext.Provider
             value={{
@@ -61,7 +111,9 @@ const AuthState = ({children}) => {
                user: state.user,
                message: state.message,
                registerUser,
-               userAuth
+               userAuth,
+               logIn,
+               logOut
             }}
         >
             {children}
