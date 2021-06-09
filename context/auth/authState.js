@@ -84,10 +84,13 @@ const AuthState = ({children}) => {
 
         try {
             const answer = await clientAxios.get('/api/auth');
-            dispatch({
-                type: USER_AUTH,
-                payload:answer.data.user
-            })
+            if(answer.data.user){
+                dispatch({
+                    type: USER_AUTH,
+                    payload:answer.data.user
+                })
+            }
+           
         } catch (error) {
             dispatch({
                 type: ERROR_LOGIN,

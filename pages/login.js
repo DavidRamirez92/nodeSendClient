@@ -14,7 +14,7 @@ const Login = () => {
     const { logIn, auth, message } = AuthContext;
 
     //Next router 
-    const router = useRouter;
+    const router = useRouter();
 
     useEffect(() => {
         if(auth) {
@@ -34,7 +34,7 @@ const Login = () => {
                     .required("Email is required"),
 
             password: Yup.string()
-                      .required("Passowrd is required")
+                      .required("Password is required")
         }),
         onSubmit: values => {
             logIn(values);

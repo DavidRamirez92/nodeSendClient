@@ -18,10 +18,13 @@ const Header = () => {
   const {cleanState } = AppContext;
 
   useEffect(()=> {
-    userAuth();
+      if(user){
+        userAuth();
+      }
+    
   },[]);
 
-    const redirect = () => {
+    const redirectUser = () => {
         router.push('/');
         cleanState();
     }
@@ -29,7 +32,7 @@ const Header = () => {
     return ( 
         <header className="py-8 flex flex-col md:flex-row item-center justify-between">
                 <img 
-                    onClick={() => redirect() }
+                    onClick={() => redirectUser() }
                     className="w-64 mb-8 md:mb-0 cursor-pointer" src="/logo.svg"/>
         
             
