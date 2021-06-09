@@ -96,7 +96,7 @@ export default ({link}) => {
                     <>
                         <h1 className="text-4xl text-center text-gray-700">Download the File:</h1>
                         <div className="flex items-center justify-center mt-10">
-                            <a href={`${process.env.backendURL}/api/files/${link.file}`} className="bg-red-500 text-center px-10 py-3 rounded uppercase font-bold text-white cursor-pointer">Here</a>
+                            <a href={`${process.env.backendURL}api/files/${link.file}`} className="bg-red-500 text-center px-10 py-3 rounded uppercase font-bold text-white cursor-pointer">Here</a>
                         </div>
                     </>
                 )
